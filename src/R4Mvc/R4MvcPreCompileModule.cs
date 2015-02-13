@@ -28,7 +28,7 @@ namespace R4Mvc
 				return;
 			}
 
-			Debugger.Launch();
+			// Debugger.Launch();
 			this.project = ((CompilationContext)(context)).Project;
 
 			var compiler = context.CSharpCompilation;
