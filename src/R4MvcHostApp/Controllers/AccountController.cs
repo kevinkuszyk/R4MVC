@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -10,7 +10,7 @@ using R4MvcHostApp.Models;
 namespace R4MvcHostApp.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public partial class AccountController : Controller
     {
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
@@ -18,8 +18,17 @@ namespace R4MvcHostApp.Controllers
             SignInManager = signInManager;
         }
 
-        public UserManager<ApplicationUser> UserManager { get; private set; }
-        public SignInManager<ApplicationUser> SignInManager { get; private set; }
+        public UserManager<ApplicationUser> UserManager
+        {
+            get;
+            private set;
+        }
+
+        public SignInManager<ApplicationUser> SignInManager
+        {
+            get;
+            private set;
+        }
 
         // GET: /Account/Login
         [HttpGet]
@@ -73,7 +82,12 @@ namespace R4MvcHostApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName };
+                var user = new ApplicationUser
+                {
+                UserName = model.UserName
+                }
+
+                ;
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -95,10 +109,7 @@ namespace R4MvcHostApp.Controllers
         [HttpGet]
         public IActionResult Manage(ManageMessageId? message = null)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : "";
+            ViewBag.StatusMessage = message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed." : message == ManageMessageId.Error ? "An error has occurred." : "";
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
         }
@@ -116,7 +127,12 @@ namespace R4MvcHostApp.Controllers
                 var result = await UserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                    return RedirectToAction("Manage", new
+                    {
+                    Message = ManageMessageId.ChangePasswordSuccess
+                    }
+
+                    );
                 }
                 else
                 {
@@ -138,8 +154,7 @@ namespace R4MvcHostApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        #region Helpers
-
+#region Helpers
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -170,6 +185,6 @@ namespace R4MvcHostApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-        #endregion
+#endregion
     }
 }
